@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/6.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -99,6 +99,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# dizer ao Django para usar seu model de usuário
+AUTH_USER_MODEL = 'app.Cadastro'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
@@ -116,3 +119,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'app', 'static'),
+]
+
+
+# onde redirecionar após o login
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'homepage'  # para onde vai após login
+LOGOUT_REDIRECT_URL = 'login'  # para onde vai após logout

@@ -1,32 +1,19 @@
-const Email_correto = "indiano@gmail.com"
-const Senha_correta = "Indiano*123"
-
 function fazer_login() {
     const email = document.getElementById("email").value.trim()
     const senha = document.getElementById("password").value.trim()
-    const mensagem = document.getElementById("mensagem")
+    const mensagem = document.getElementById("mensagem");
 
-// Limpa mensagens anteriores
-mensagem.innerText = ""
-mensagem.classList.remove("shake"); // Remove o efeito anterior
-mensagem.style.color = "red";
-aplicarEfeitoTremer(mensagem)
+    mensagem.innerText = "";
+    mensagem.style.color = "red";
 
-if (!email || !senha) {
-    mensagem.textContent = "Por favor, preencha todos os campos.";
-    return;
-}
-
-    if (email === Email_correto && senha === Senha_correta) {
-    // Redirecionar para a página inicial
-    setTimeout(() => {
-        window.location.href = "../homepage/homepagehtml.html"
-    },)
-    } else {
-    mensagem.style.color = "red"
-    mensagem.innerText = "E-mail ou senha incorretos."
-    aplicarEfeitoTremer(mensagem)
+    if (!email || !senha) {
+        mensagem.textContent = "Por favor, preencha todos os campos.";
+        aplicarEfeitoTremer(mensagem);
+        return;
     }
+
+    // Envia o formulário para o Django processar
+    document.getElementById("loginForm").submit();
 }
 function aplicarEfeitoTremer(elemento) {
 elemento.classList.add("shake");

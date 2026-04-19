@@ -19,48 +19,79 @@
 <body>
   <main class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="row w-100 align-items-center justify-content-center">
-      
-      <!-- Logo -->
-      <div class="col-12 col-md-6 col-lg-4 text-center mb-4 mb-md-0 d-flex justify-content-center">
-        <a href="../placeholder/">
-          <img src="{% static 'media/logo-lateral.png' %}" alt="Logo Rack+" class="img-fluid logo-img">
-        </a>
-      </div>
 
       <!-- Formulário -->
-      <div class="col-12 col-md-6 col-lg-4">
+      <div class="col-12 col-md-8 col-lg-6">
         <div class="card p-4">
-          <h1 class="text-center mb-4 h3 h-md2">Cadastro</h1>
-            
+          <!-- Logo -->
+          <div class="text-center mb-4 d-flex justify-content-center">
+            <a href="../placeholder/">
+              <img src="{% static 'media/logo-lateral.png' %}" alt="Logo Rack+" class="img-fluid logo-img">
+            </a>
+          </div>
+          <h1 class="text-center mb-4 h3">Cadastro</h1>
+          
+          <form id="cadastroForm" method="post">
+            {% csrf_token %}
             <div class="mb-3">
               <label for="username" class="form-label">Nome</label>
-              <input type="text" class="form-control" id="username" name="username" required>
+              <input type="text" class="form-control" id="username" name="username">
             </div>
 
             <div class="mb-3">
               <label for="email" class="form-label">E-mail</label>
-              <input type="email" class="form-control" id="email" name="email" required>
+              <input type="email" class="form-control" id="email" name="email">
             </div>
 
             <label for="password" class="form-label">Senha</label>
             <div class="mb-3 input-group">
-              <input type="password" class="form-control" id="password" name="password" required>
-              <button class="input-group-text" id="togglePassword" style="cursor: pointer;" onclick=togglePassword()></span>
+              <input type="password" class="form-control" id="password" name="password">
+              <button type="button" class="input-group-text" id="btntogglePassword" style="cursor: pointer;" onclick="togglePassword()">
                 <i class="bi bi-eye-slash" id="eyeIcon"></i>
               </button>
             </div>
 
             <div class="mb-3">
               <label for="cpf" class="form-label">CPF</label>
-              <input type="number" class="form-control" id="cpf" name="cpf" required>
+              <input type="number" class="form-control" id="cpf" name="cpf">
             </div>
 
-            <button type="button" class="btn btn-custom w-100" onclick=validarCadastro()>Cadastre-se</button>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="instituicao" class="form-label">Instituição</label>
+                <input type="text" class="form-control" id="inst" name="instituicao">  
+              </div>
+              <div class="col-md-6">
+                <label for="cargo" class="form-label">Cargo *</label>
+                <select class="form-select" id="cargo" name="cargo">
+                  <option value="nenhum" disabled selected>Selecione...</option>
+                  <option value="aluno">Aluno</option>
+                  <option value="professor">Professor</option>
+                  <option value="gestor">Gestor</option>
+                  <option value="ti">Técnico de TI</option>
+                  <option value="admin">Administrador</option>
+                </select>  
+              </div>
+            </div>
+
+            <!-- Mensagens do Django (erros do backend) -->
+            {% if messages %}
+                {% for message in messages %}
+                    <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; margin-bottom: 8px;">
+                        {{ message }}
+                    </p>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Mensagem do JS (validação frontend) -->
             <p id="mensagem"></p>
+
+            <button type="button" class="btn btn-custom w-100" onclick="validarCadastro()">Cadastre-se</button>
 
             <div class="text-center mt-3">
               <a href="../">Já possui uma conta? Faça login</a>
             </div>
+          </form>
         </div>
       </div>
 

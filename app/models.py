@@ -1,12 +1,15 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 #Cadastro
-class Cadastro(models.Model):
+class Cadastro(AbstractUser):
+    """
+    Herda do AbstractUser que já tem: username, password, first_name, last_name, email
+    """
     nome = models.CharField('Nome Completo', max_length=60)
     cpf = models.CharField(unique=True, max_length=11, editable=True)
-    email = models.EmailField('E-mail', unique=True)
-    senha = models.CharField('Senha', max_length=100, blank=False, null=False)
     instituicao = models.CharField('Instituição', max_length=200)
+    
     class Cargo(models.TextChoices):
         PROFESSOR = 'professor', 'Professor'
         TUTOR = 'tutor', 'Tutor'
@@ -21,6 +24,7 @@ class Cadastro(models.Model):
     #     if self.senha and not self.senha.startswith('pbkdf2_'):
     #         self.senha = make_password(self.senha)
     #     self.save()
+    #⚠️ Importante: Isso funciona mas a senha está sendo salva em texto puro no banco, o que não é seguro. Quando quiser melhorar, use o sistema de autenticação do Django (django.contrib.auth) que faz hash da senha automaticamente. Quer implementar isso agora ou deixa pra depois?
 
     # #VERIFICAR SENHA
     # def verificar_senha(self, senha_plain):
@@ -35,7 +39,3 @@ class Cadastro(models.Model):
     def __str__(self):
         return f"{self.nome} - {self.get_cargo_display()}"
     
-
-#Login
-
-#Dashboard

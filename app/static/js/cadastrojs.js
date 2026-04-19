@@ -2,11 +2,15 @@ function validarCadastro() {
     const emailELemento = document.getElementById("email")
     const cpfElemento = document.getElementById("cpf")
     const senhaElemento = document.getElementById("password")
+    const instElemento = document.getElementById("inst")
+    const cargoElemento = document.getElementById("cargo")
 
     const nome = document.getElementById("username").value.trim();
     const email = document.getElementById("email").value.trim();
     const cpf = document.getElementById("cpf").value.trim();
     const senha = document.getElementById("password").value.trim();
+    const instituicao = document.getElementById("inst").value.trim();
+    const cargo = document.getElementById("cargo").value.trim();
     const mensagem = document.getElementById("mensagem");
 
     //Limpar efeitos da tela
@@ -18,10 +22,21 @@ function validarCadastro() {
     emailELemento.classList.remove("is-invalid")
     senhaElemento.classList.remove("is-invalid")
     cpfElemento.classList.remove("is-invalid")
+    instElemento.classList.remove("is-invalid")
+    cargoElemento.classList.remove("is-invalid")
+    document.getElementById("username").classList.remove("is-invalid")
 
     //Mensagem pra quando todos inputs tiverem vazios
-    if (!nome || !email || !cpf || !senha) {
+    if (!nome || !email || !cpf || !senha || !instituicao || cargo ==="nenhum" || cargo === "") {
       mostrarErro("Por favor, preencha todos os campos.");
+      // Marca em vermelho os campos vazios individualmente
+      if (!nome) document.getElementById("username").classList.add("is-invalid");
+      if (!email) emailELemento.classList.add("is-invalid");
+      if (!cpf) cpfElemento.classList.add("is-invalid");
+      if (!senha) senhaElemento.classList.add("is-invalid");
+      if (!instituicao) instElemento.classList.add("is-invalid");
+      if (!cargo) cargoElemento.classList.add("is-invalid");
+      if (cargo === "nenhum" || cargo === "") cargoElemento.classList.add("is-invalid");
       return;
     }
     
@@ -40,8 +55,8 @@ function validarCadastro() {
       return;
     }
 
-    mensagem.style.color = "green";
-    mensagem.textContent = "Cadastro realizado com sucesso!";
+    // Envia o form
+    document.getElementById("cadastroForm").submit();
 }
 
 function mostrarErro(texto, elemento) {

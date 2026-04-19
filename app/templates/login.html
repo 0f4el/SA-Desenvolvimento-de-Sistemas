@@ -32,21 +32,34 @@
         <div class="card p-4">
           <h1 class="text-center mb-4 h3 h-md2">Entrar</h1>
             
+            <form id="loginForm" method="post">
+              {% csrf_token %}
             <div class="mb-3">
               <label for="email" class="form-label">E-mail</label>
-              <input type="email" class="form-control" id="email" name="email" required>
+              <input type="email" class="form-control" id="email" name="email">
             </div>
 
             <label for="password" class="form-label">Senha</label>
             <div class="mb-3 input-group">
-              <input type="password" class="form-control" id="password" name="password" required>
-              <button class="input-group-text" id="togglePassword" title="Mostrar ou ocultar senha" style="cursor: pointer;" onclick="togglePassword()">
+              <input type="password" class="form-control" id="password" name="password">
+              <button class="input-group-text" id="btntogglePassword" title="Mostrar ou ocultar senha" style="cursor: pointer;" onclick="togglePassword()">
                 <i class="bi bi-eye-slash" id="eyeIcon"></i>
               </button>
             </div>
 
-            <button type="button" class="btn btn-custom w-100" id="btn-login" onclick= fazer_login()>Entrar</button>
-            <p id="mensagem"></p>
+            <!-- Mensagens do Django (email/senha inválidos) -->
+            {% if messages %}
+                {% for message in messages %}
+                    <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; margin-bottom: 8px;">
+                        {{ message }}
+                    </p>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Mensagem do JS (campos vazios) -->
+            <p id="mensagem" style="color:red; margin-bottom: 8px;"></p>
+
+            <button type="button" class="btn btn-custom w-100" id="btn-login" onclick="fazer_login()">Entrar</button>
 
             <div class="text-center mt-3">
               <a href="../cadastro/">Não possui uma conta? Cadastre-se!</a>
@@ -55,6 +68,7 @@
             <div class="text-center mt-3">
               <a href="../placeholder/">Esqueceu sua senha?</a>
             </div>
+            </form>
         </div>
       </div>
 
