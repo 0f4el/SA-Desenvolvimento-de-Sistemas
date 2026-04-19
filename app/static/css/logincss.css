@@ -1,0 +1,51 @@
+
+.card {
+    border-radius: 15px;
+    box-shadow: 3px 3px 10px rgba(0,0,0,0.3);
+    max-width: 400px; 
+    margin: 0 auto;     /* centraliza */
+}
+.btn-custom {
+    background-color: rgb(43, 101, 226);
+    color: white;
+}
+.btn-custom:hover {
+    background-color: rgb(30, 70, 180);
+    color: white;
+}
+.logo-img {
+    max-height: 120px;
+}
+@media (min-width: 768px) {
+    .logo-img {
+    max-height: 200px;
+    }
+}
+@media (min-width: 1024px) {
+    .logo-img {
+    max-height: 250px;
+    }
+}
+/* Inputs mais compactos */
+.form-control {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+}
+/* Menos padding em telas pequenas */
+@media (max-width: 576px) {
+    .card {
+    padding: 1rem !important;
+    }
+}
+
+@keyframes tremer {
+0% { transform: translateX(0); }
+25% { transform: translateX(-5px); }
+50% { transform: translateX(5px); }
+75% { transform: translateX(-5px); }
+100% { transform: translateX(0); }
+}
+
+.shake {
+animation: tremer 0.3s ease;
+}
