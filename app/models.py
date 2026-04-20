@@ -16,7 +16,7 @@ class Cadastro(AbstractUser):
         GESTOR = 'gestor', 'Gestor'
         ALUNO = 'aluno', 'Aluno'
 
-    cargo = models.CharField('Cargo',max_length=20,choices=Cargo.choices,default=Cargo.ALUNO,help_text='Selecione o cargo')
+    cargo = models.CharField('Cargo',max_length=20,choices=Cargo.choices,help_text='Selecione o cargo')
 
     # #SALVAR SENHA COMO HASH - DAR UMA OLHADA
     #     def salvar_com_hash(self):
@@ -37,5 +37,5 @@ class Cadastro(AbstractUser):
 
     
     def __str__(self):
-        return f"{self.nome} - {self.get_cargo_display()}"
+        return f"{self.username} - {self.get_cargo_display()}"
     

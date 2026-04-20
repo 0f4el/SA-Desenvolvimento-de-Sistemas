@@ -8,7 +8,6 @@ from .models import Cadastro
 
 def login_view(request):
     """Exibe a tela de login usando a autenticação Django"""
-
     if request.user.is_authenticated:
         return redirect('homepage')
 
@@ -17,6 +16,7 @@ def login_view(request):
         senha = request.POST.get('password')
         
         try:
+            #busca no banco quem tem esse email para descobrir o username
             usuario = Cadastro.objects.get(email=email)
             username = usuario.username
         except Cadastro.DoesNotExist:
@@ -60,32 +60,20 @@ def cadastro_view(request):
         instituicao = request.POST.get('instituicao')
         cargo = request.POST.get('cargo')
         
+        erros = {}
 
-
-        """
-        ESSA PARTE ESTA BUGANDO
-        BUGS: As mensagens de erro não estão desaparecendo depois de corrigir o camopo, e ela não some quando aparece a mensagem "Por favor, preencha todos os campos.";
-        O campo que está errado não fica contornado de vermelho;
-        Aparentemente o cargo pode não estar salvando no model(ou então o model que nao esta mostrando certo no admin)       
-        """
         # Verifica se nome já existe
         if Cadastro.objects.filter(username=nome).exists():
-            messages.error(request, 'Este nome de usuário já está em uso!')
-            return render(request, 'cadastro.html')
-
+            erros['username'] = 'Este nome de usuário já está em uso!'
         # Verifica se email já existe
         if Cadastro.objects.filter(email=email).exists():
-            messages.error(request, 'Este e-mail já está cadastrado!')
-            return render(request, 'cadastro.html')
-        
+            erros['email'] = 'Este e-mail já está cadastrado!'
         # Verifica se CPF já existe
         if Cadastro.objects.filter(cpf=cpf).exists():
-            messages.error(request, 'Este CPF já está cadastrado!')
-            return render(request, 'cadastro.html')
-        """
-        ESSA PARTE ESTA BUGANDO  
-        """
-        
+            erros['cpf'] = 'Este CPF já está cadastrado!'
+        if erros:
+            return render(request, 'cadastro.html', {'erros': erros, 'dados': request.POST})
+
         # Cria o usuário
         Cadastro.objects.create(
             username=nome,
@@ -95,11 +83,8 @@ def cadastro_view(request):
             instituicao=instituicao,
             cargo=cargo
         )
-        
         return redirect('login')
-
     return render(request, 'cadastro.html')
-
 
 def em_desenvolvimento_view(request):
     """Exibe uma tela placeholder"""
