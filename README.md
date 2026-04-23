@@ -11,7 +11,7 @@ O RACK+ e uma aplicação web desenvolvida em Django para auxiliar no gerenciame
 
 A proposta do sistema e facilitar o monitoramento de salas, racks e notebooks, permitindo visualizar quais equipamentos estão disponiveis, em uso, ausentes ou em manutenção.
 
-O projeto foi desenvolvido como parte da SA (Situação de Aprendizagem) de Desenvolvimento de Sistemas Web.
+O projeto foi desenvolvido para a SA (Situação de Aprendizagem) de Desenvolvimento de Sistemas Web e foi se utilizado e adaptado do modelo da SA anterior do Rack+.
 
 ---
 
