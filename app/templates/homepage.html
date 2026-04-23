@@ -13,6 +13,148 @@
         background: url("{% static 'media/teladefundo.png' %}") no-repeat center center fixed;
         background-size: cover;
     }
+
+    .page-panel {
+        background: rgba(250, 252, 255, 0.94);
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        border-radius: 28px;
+        box-shadow: 0 18px 42px rgba(15, 23, 42, 0.12);
+        backdrop-filter: blur(6px);
+    }
+
+    .user-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 0.45rem 0.8rem;
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 999px;
+        text-decoration: none;
+        color: #0f172a;
+    }
+
+    .user-chip img {
+        width: 34px;
+        height: 34px;
+    }
+
+    .user-chip-text {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.1;
+    }
+
+    .user-chip-text small {
+        color: #64748b;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+
+    .user-chip-text strong {
+        font-size: 0.92rem;
+        font-weight: 700;
+    }
+
+    .home-header {
+        background: linear-gradient(145deg, rgba(219, 234, 254, 0.92) 0%, rgba(239, 246, 255, 0.92) 42%, rgba(248, 250, 252, 0.92) 100%);
+        border-radius: 24px;
+        padding: 1rem 1.2rem;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        margin-bottom: 1rem;
+    }
+
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .room-card {
+        display: block;
+        text-decoration: none;
+        overflow: hidden;
+        border-radius: 24px;
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(241,245,249,0.96) 100%);
+        box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .room-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 22px 40px rgba(15, 23, 42, 0.16);
+    }
+
+    .card-sala-imagem {
+        position: relative;
+        min-height: 170px;
+        background: linear-gradient(145deg, #dbeafe 0%, #eff6ff 42%, #f8fafc 100%);
+    }
+
+    .card-sala-imagem img {
+        opacity: 0.9;
+        object-fit: contain !important;
+        padding: 1.1rem;
+    }
+
+    .room-card-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(15, 23, 42, 0.86), rgba(15, 23, 42, 0.18) 58%, transparent 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 1rem;
+        color: white;
+    }
+
+    .room-card-overlay p {
+        margin: 0 0 0.2rem;
+        color: rgba(226, 232, 240, 0.9);
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .room-card-overlay strong {
+        font-size: 1.05rem;
+    }
+
+    .room-card-footer {
+        display: grid;
+        gap: 0.75rem;
+        padding: 0.9rem 1rem 1rem;
+        color: #334155;
+    }
+
+    .room-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.83rem;
+        color: #475569;
+    }
+
+    .room-actions {
+        display: flex;
+        gap: 0.55rem;
+        flex-wrap: wrap;
+    }
+
+    .room-actions .btn {
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .messages-panel {
+        display: grid;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -55,8 +197,12 @@
             {% csrf_token %}
             <button class="btn btn-primary" type="submit">Sair</button>
         </form>
-        <a href="../placeholder/" target="_blank" rel="noopener noreferrer">
-            <img src="{% static 'media/icon-user.png' %}" alt="Usuário" style="width: 30px; height: 30px;">
+        <a href="../placeholder/" target="_blank" rel="noopener noreferrer" class="user-chip">
+            <img src="{% static 'media/icon-user.png' %}" alt="Usuário">
+            <span class="user-chip-text d-none d-sm-flex">
+                <small>Usuário</small>
+                <strong>{{ usuario.username }}</strong>
+            </span>
         </a>
     </nav>
 
@@ -83,96 +229,79 @@
 
     <main class="conteudo-principal p-3 p-md-4">
 
-        <div class="d-none d-md-flex justify-content-between align-items-center mb-3">
-            <h1 class="text-center flex-grow-1">Salas</h1>
-            
-        <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button class="btn btn-primary" type="submit">Sair</button>
-        </form>
-            <a href="../placeholder/" target="_blank" rel="noopener noreferrer">
-                <img src="{% static 'media/icon-user.png' %}" alt="Usuário" class="icone-nav"> </a>
+        <div class="page-panel p-3 p-md-4">
+            <div class="home-header d-none d-md-flex justify-content-between align-items-center">
+                <h1 class="text-center flex-grow-1 mb-0">Salas</h1>
+
+                <div class="header-actions">
+                    <a href="{% url 'sala_create' %}" class="btn btn-success">Nova sala</a>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-primary" type="submit">Sair</button>
+                    </form>
+                    <a href="../placeholder/" target="_blank" rel="noopener noreferrer" class="user-chip">
+                        <img src="{% static 'media/icon-user.png' %}" alt="Usuário">
+                        <span class="user-chip-text">
+                            <small>Usuário</small>
+                            <strong>{{ usuario.username }}</strong>
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="d-md-none my-3">
+                <form class="input-group">
+                    <span class="input-group-text bg-light border-0">
+                        <img src="{% static 'media/icon-lupa.png' %}" alt="Pesquisar" style="width: 20px; height: 20px;">
+                    </span>
+                    <input type="text" class="form-control bg-light border-0" placeholder="PESQUISAR...">
+                </form>
+            </div>
+
+            <div class="d-md-none mb-3">
+                <a href="{% url 'sala_create' %}" class="btn btn-success w-100">Nova sala</a>
+            </div>
+
+            {% if messages %}
+                <div class="messages-panel">
+                    {% for message in messages %}
+                        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %} mb-0">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="row g-3 g-lg-4">
+                {% for sala in salas %}
+                    <div class="col-6 col-md-4">
+                        <div class="room-card">
+                            <div class="card-sala-imagem">
+                                <img src="{% static 'media/icon-sala.png' %}" alt="{{ sala.nome }}" style="width: 100%; height: 100%;">
+                                <div class="room-card-overlay">
+                                    <p>Painel da sala</p>
+                                    <strong>{{ sala.nome }}</strong>
+                                </div>
+                            </div>
+
+                            <div class="room-card-footer">
+                                <div class="room-meta">
+                                    <span>Bloco: {{ sala.bloco|default:"-" }}</span>
+                                    <span>Numero: {{ sala.numero }}</span>
+                                </div>
+                                <div class="room-actions">
+                                    <a href="{% url 'racks_da_sala' sala.id %}" class="btn btn-primary btn-sm">Ver racks</a>
+                                    <a href="{% url 'sala_update' sala.id %}" class="btn btn-outline-secondary btn-sm">Editar</a>
+                                    <a href="{% url 'sala_delete' sala.id %}" class="btn btn-outline-danger btn-sm">Excluir</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>Nenhuma sala cadastrada.</p>
+                {% endfor %}
+            </div>
         </div>
-
-        <div class="d-md-none my-3">
-            <form class="input-group">
-                <span class="input-group-text bg-light border-0">
-                    <img src="{% static 'media/icon-lupa.png' %}" alt="Pesquisar" style="width: 20px; height: 20px;">
-                </span>
-                <input type="text" class="form-control bg-light border-0" placeholder="PESQUISAR...">
-            </form>
-        </div>
-
-        <div class="row g-3 g-lg-4">
-
-            <div class="col-6 col-md-4">
-                <a href="../placeholder/" target="_blank" rel="noopener noreferrer" class="card text-decoration-none shadow-sm border-0 rounded-4" style="overflow: hidden;">
-                    
-                    <div class="card-sala-imagem"><img src="{% static 'media/icon-sala.png' %}" alt="sala1304" style="width: 100%; height: 100%; object-fit: cover;"></div>
-                    
-                    <div class="card-img-overlay d-flex justify-content-between align-items-end text-white p-2" style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
-                        <span class="fw-bold">Sala 1304</span>
-                        <span class="indicador-status bg-danger"></span> 
-                    </div>
-                </a>
-            </div>
-
-            <div class="col-6 col-md-4">
-                <a href="../placeholder/" target="_blank" rel="noopener noreferrer" class="card text-decoration-none shadow-sm border-0 rounded-4" style="overflow: hidden;">
-                    <div class="card-sala-imagem"><img src="{% static 'media/icon-sala.png' %}" alt="sala1305" style="width: 100%; height: 100%; object-fit: cover;"></div>
-                    
-                    <div class="card-img-overlay d-flex justify-content-between align-items-end text-white p-2" style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
-                        <span class="fw-bold">Sala 1305</span>
-                        <span class="indicador-status bg-success"></span> 
-                    </div>
-                </a>
-            </div>
-
-            <div class="col-6 col-md-4">
-                <a href="../placeholder/" target="_blank" rel="noopener noreferrer" class="card text-decoration-none shadow-sm border-0 rounded-4" style="overflow: hidden;">
-                    <div class="card-sala-imagem"><img src="{% static 'media/icon-sala.png' %}" alt="sala1306" style="width: 100%; height: 100%; object-fit: cover;"></div>
-                    
-                    <div class="card-img-overlay d-flex justify-content-between align-items-end text-white p-2" style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
-                        <span class="fw-bold">Sala 1306</span>
-                        <span class="indicador-status bg-success"></span> 
-                    </div>
-                </a>
-            </div>
-
-            <div class="col-6 col-md-4">
-                <a href="../placeholder/" target="_blank" rel="noopener noreferrer" class="card text-decoration-none shadow-sm border-0 rounded-4" style="overflow: hidden;">
-                    <div class="card-sala-imagem"><img src="{% static 'media/icon-sala.png' %}" alt="sala1307" style="width: 100%; height: 100%; object-fit: cover;"></div>
-                    
-                    <div class="card-img-overlay d-flex justify-content-between align-items-end text-white p-2" style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
-                        <span class="fw-bold">Sala 1307</span>
-                        <span class="indicador-status bg-success"></span> 
-                    </div>
-                </a>
-            </div>
-            
-            <div class="col-6 col-md-4">
-                <a href="../placeholder/" target="_blank" rel="noopener noreferrer" class="card text-decoration-none shadow-sm border-0 rounded-4" style="overflow: hidden;">
-                    <div class="card-sala-imagem"><img src="{% static 'media/icon-sala.png' %}" alt="sala1308" style="width: 100%; height: 100%; object-fit: cover;"></div>
-                    
-                    <div class="card-img-overlay d-flex justify-content-between align-items-end text-white p-2" style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
-                        <span class="fw-bold">Sala 1308</span>
-                        <span class="indicador-status bg-success"></span> 
-                    </div>
-                </a>
-            </div>
-            
-            <div class="col-6 col-md-4">
-                <a href="../placeholder/" target="_blank" rel="noopener noreferrer" class="card text-decoration-none shadow-sm border-0 rounded-4" style="overflow: hidden;">
-                    <div class="card-sala-imagem"><img src="{% static 'media/icon-sala.png' %}" alt="sala1309" style="width: 100%; height: 100%; object-fit: cover;"></div>
-                    
-                    <div class="card-img-overlay d-flex justify-content-between align-items-end text-white p-2" style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
-                        <span class="fw-bold">Sala 1309</span>
-                        <span class="indicador-status bg-danger"></span> 
-                    </div>
-                </a>
-            </div>
-
-        </div> 
     </main>
     <!--FOI UTILIZADO O JS DO BOOTSTRAP PARA FAZER A BARRA LATERAL FUNCIONAR--> 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

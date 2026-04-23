@@ -45,8 +45,6 @@
     object-fit: cover; 
 }
 
-/* Bolinha de status, OBS: No programa finalizado com backend e tudo haveria um backend pra definir a cor da bolinha
-porém, como não é este o caso foi estilo pré definido */
 .indicador-status {
     width: 18px;
     height: 18px;
