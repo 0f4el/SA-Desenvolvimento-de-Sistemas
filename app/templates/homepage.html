@@ -1,19 +1,11 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RACK+ Homepage</title>
-    <link rel="icon" href="{% static 'media/logo.png' %}" type="image/png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/homepagecss.css' %}">
-    <style>
-    body {
-        background: url("{% static 'media/teladefundo.png' %}") no-repeat center center fixed;
-        background-size: cover;
-    }
 
+{% block title %}RACK+ Homepage{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/homepagecss.css' %}">
+<style>
     .page-panel {
         background: rgba(250, 252, 255, 0.94);
         border: 1px solid rgba(15, 23, 42, 0.08);
@@ -155,155 +147,147 @@
         gap: 0.75rem;
         margin-bottom: 1rem;
     }
-  </style>
-</head>
-<body>
+</style>
+{% endblock %}
 
-    <nav class="d-none d-md-flex flex-column align-items-center vh-100 position-fixed top-0 start-0 barra-lateral-desktop py-3">
-        
-        <a href="../placeholder/" target="_blank" rel="noopener noreferrer">
-            <img src="{% static 'media/logo.png' %}" id="logoMenor" alt="Logo" class="icone-nav mb-5">
-        </a>
-        
-        <a href="../placeholder/" target="_blank" rel="noopener noreferrer">
-            <img src="{% static 'media/icon-lupa.png' %}" alt="Pesquisar" id="search" class="icone-nav my-2">
-        </a>
-        
-        <a href="../placeholder/" target="_blank" rel="noopener noreferrer">
-            <img src="{% static 'media/icon-dashboard.png' %}" alt="Dashboard" id="dashboard" class="icone-nav my-2">
-        </a>
-        
-        <a href="../placeholder/" target="_blank" rel="noopener noreferrer">
-            <img src="{% static 'media/icon-logs.png' %}" alt="logs" id="logs" class="icone-nav my-2">
-        </a>
-        
-        <a href="../placeholder/" target="_blank" rel="noopener noreferrer">
-            <img src="{% static 'media/icon-config.png' %}" alt="Configurações" id="config" class="icone-nav my-2">
-        </a>
+{% block content %}
+<nav class="d-none d-md-flex flex-column align-items-center vh-100 position-fixed top-0 start-0 barra-lateral-desktop py-3">
+    <a href="../placeholder/" target="_blank" rel="noopener noreferrer">
+        <img src="{% static 'media/logo.png' %}" id="logoMenor" alt="Logo" class="icone-nav mb-5">
+    </a>
 
-    </nav>
+    <a href="../placeholder/" target="_blank" rel="noopener noreferrer">
+        <img src="{% static 'media/icon-lupa.png' %}" alt="Pesquisar" id="search" class="icone-nav my-2">
+    </a>
 
-    <nav class="d-md-none d-flex justify-content-between align-items-center bg-white shadow-sm p-3 sticky-top">
-        
-        <a href="#" data-bs-toggle="offcanvas" data-bs-target="#menuMobile" aria-controls="menuMobile">
-            <img src="{% static 'media/icon-menu.png' %}" alt="Menu" style="width: 30px; height: 30px;">
-        </a>
-        
-        <a href="../placeholder/" target="_blank" rel="noopener noreferrer">
-            <img src="{% static 'media/logo.png' %}" id="logoMenorMobile" alt="Logo" style="width: 30px; height: 30px;">
-        </a>
-        
-        <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button class="btn btn-primary" type="submit">Sair</button>
-        </form>
-        <a href="../placeholder/" target="_blank" rel="noopener noreferrer" class="user-chip">
-            <img src="{% static 'media/icon-user.png' %}" alt="Usuário">
-            <span class="user-chip-text d-none d-sm-flex">
-                <small>Usuário</small>
-                <strong>{{ usuario.username }}</strong>
-            </span>
-        </a>
-    </nav>
+    <a href="../placeholder/" target="_blank" rel="noopener noreferrer">
+        <img src="{% static 'media/icon-dashboard.png' %}" alt="Dashboard" id="dashboard" class="icone-nav my-2">
+    </a>
 
-    <div class="offcanvas offcanvas-start d-md-none" tabindex="-1" id="menuMobile" aria-labelledby="menuMobileLabel">
-        <div class="offcanvas-header">
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body d-flex flex-column align-items-center pt-4">
-            
-            <a href="../placeholder/" target="_blank" rel="noopener noreferrer" class="mb-4">
-                <img src="{% static 'media/icon-home.png' %}" alt="Home" class="icone-nav"> </a>
-            
-            <a href="../placeholder/" target="_blank" rel="noopener noreferrer" class="mb-4">
-                <img src="{% static 'media/icon-dashboard.png' %}" alt="Dashboard" class="icone-nav"> </a>
-            
-            <a href="../placeholder/" target="_blank" rel="noopener noreferrer" class="mb-4">
-                <img src="{% static 'media/icon-logs.png' %}" alt="Documentos" class="icone-nav"> </a>
-            
-            <a href="../placeholder/" target="_blank" rel="noopener noreferrer" class="mb-4">
-                <img src="{% static 'media/icon-config.png' %}" alt="Configurações" class="icone-nav"> </a>
+    <a href="../placeholder/" target="_blank" rel="noopener noreferrer">
+        <img src="{% static 'media/icon-logs.png' %}" alt="logs" id="logs" class="icone-nav my-2">
+    </a>
 
-        </div>
+    <a href="../placeholder/" target="_blank" rel="noopener noreferrer">
+        <img src="{% static 'media/icon-config.png' %}" alt="Configuracoes" id="config" class="icone-nav my-2">
+    </a>
+</nav>
+
+<nav class="d-md-none d-flex justify-content-between align-items-center bg-white shadow-sm p-3 sticky-top">
+    <a href="#" data-bs-toggle="offcanvas" data-bs-target="#menuMobile" aria-controls="menuMobile">
+        <img src="{% static 'media/icon-menu.png' %}" alt="Menu" style="width: 30px; height: 30px;">
+    </a>
+
+    <a href="../placeholder/" target="_blank" rel="noopener noreferrer">
+        <img src="{% static 'media/logo.png' %}" id="logoMenorMobile" alt="Logo" style="width: 30px; height: 30px;">
+    </a>
+
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button class="btn btn-primary" type="submit">Sair</button>
+    </form>
+    <a href="../placeholder/" target="_blank" rel="noopener noreferrer" class="user-chip">
+        <img src="{% static 'media/icon-user.png' %}" alt="Usuario">
+        <span class="user-chip-text d-none d-sm-flex">
+            <small>Usuario</small>
+            <strong>{{ usuario.username }}</strong>
+        </span>
+    </a>
+</nav>
+
+<div class="offcanvas offcanvas-start d-md-none" tabindex="-1" id="menuMobile" aria-labelledby="menuMobileLabel">
+    <div class="offcanvas-header">
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
+    <div class="offcanvas-body d-flex flex-column align-items-center pt-4">
+        <a href="../placeholder/" target="_blank" rel="noopener noreferrer" class="mb-4">
+            <img src="{% static 'media/icon-home.png' %}" alt="Home" class="icone-nav">
+        </a>
+        <a href="../placeholder/" target="_blank" rel="noopener noreferrer" class="mb-4">
+            <img src="{% static 'media/icon-dashboard.png' %}" alt="Dashboard" class="icone-nav">
+        </a>
+        <a href="../placeholder/" target="_blank" rel="noopener noreferrer" class="mb-4">
+            <img src="{% static 'media/icon-logs.png' %}" alt="Documentos" class="icone-nav">
+        </a>
+        <a href="../placeholder/" target="_blank" rel="noopener noreferrer" class="mb-4">
+            <img src="{% static 'media/icon-config.png' %}" alt="Configuracoes" class="icone-nav">
+        </a>
+    </div>
+</div>
 
-    <main class="conteudo-principal p-3 p-md-4">
+<main class="conteudo-principal p-3 p-md-4">
+    <div class="page-panel p-3 p-md-4">
+        <div class="home-header d-none d-md-flex justify-content-between align-items-center">
+            <h1 class="text-center flex-grow-1 mb-0">Salas</h1>
 
-        <div class="page-panel p-3 p-md-4">
-            <div class="home-header d-none d-md-flex justify-content-between align-items-center">
-                <h1 class="text-center flex-grow-1 mb-0">Salas</h1>
-
-                <div class="header-actions">
-                    <a href="{% url 'sala_create' %}" class="btn btn-success">Nova sala</a>
-                    <form method="post" action="{% url 'logout' %}">
-                        {% csrf_token %}
-                        <button class="btn btn-primary" type="submit">Sair</button>
-                    </form>
-                    <a href="../placeholder/" target="_blank" rel="noopener noreferrer" class="user-chip">
-                        <img src="{% static 'media/icon-user.png' %}" alt="Usuário">
-                        <span class="user-chip-text">
-                            <small>Usuário</small>
-                            <strong>{{ usuario.username }}</strong>
-                        </span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="d-md-none my-3">
-                <form class="input-group">
-                    <span class="input-group-text bg-light border-0">
-                        <img src="{% static 'media/icon-lupa.png' %}" alt="Pesquisar" style="width: 20px; height: 20px;">
-                    </span>
-                    <input type="text" class="form-control bg-light border-0" placeholder="PESQUISAR...">
+            <div class="header-actions">
+                <a href="{% url 'sala_create' %}" class="btn btn-success">Nova sala</a>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button class="btn btn-primary" type="submit">Sair</button>
                 </form>
+                <a href="../placeholder/" target="_blank" rel="noopener noreferrer" class="user-chip">
+                    <img src="{% static 'media/icon-user.png' %}" alt="Usuario">
+                    <span class="user-chip-text">
+                        <small>Usuario</small>
+                        <strong>{{ usuario.username }}</strong>
+                    </span>
+                </a>
             </div>
+        </div>
 
-            <div class="d-md-none mb-3">
-                <a href="{% url 'sala_create' %}" class="btn btn-success w-100">Nova sala</a>
+        <div class="d-md-none my-3">
+            <form class="input-group">
+                <span class="input-group-text bg-light border-0">
+                    <img src="{% static 'media/icon-lupa.png' %}" alt="Pesquisar" style="width: 20px; height: 20px;">
+                </span>
+                <input type="text" class="form-control bg-light border-0" placeholder="PESQUISAR...">
+            </form>
+        </div>
+
+        <div class="d-md-none mb-3">
+            <a href="{% url 'sala_create' %}" class="btn btn-success w-100">Nova sala</a>
+        </div>
+
+        {% if messages %}
+            <div class="messages-panel">
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %} mb-0">
+                        {{ message }}
+                    </div>
+                {% endfor %}
             </div>
+        {% endif %}
 
-            {% if messages %}
-                <div class="messages-panel">
-                    {% for message in messages %}
-                        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %} mb-0">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-
-            <div class="row g-3 g-lg-4">
-                {% for sala in salas %}
-                    <div class="col-6 col-md-4">
-                        <div class="room-card">
-                            <div class="card-sala-imagem">
-                                <img src="{% static 'media/icon-sala.png' %}" alt="{{ sala.nome }}" style="width: 100%; height: 100%;">
-                                <div class="room-card-overlay">
-                                    <p>Painel da sala</p>
-                                    <strong>{{ sala.nome }}</strong>
-                                </div>
+        <div class="row g-3 g-lg-4">
+            {% for sala in salas %}
+                <div class="col-6 col-md-4">
+                    <div class="room-card">
+                        <div class="card-sala-imagem">
+                            <img src="{% static 'media/icon-sala.png' %}" alt="{{ sala.nome }}" style="width: 100%; height: 100%;">
+                            <div class="room-card-overlay">
+                                <p>Painel da sala</p>
+                                <strong>{{ sala.nome }}</strong>
                             </div>
+                        </div>
 
-                            <div class="room-card-footer">
-                                <div class="room-meta">
-                                    <span>Bloco: {{ sala.bloco|default:"-" }}</span>
-                                    <span>Numero: {{ sala.numero }}</span>
-                                </div>
-                                <div class="room-actions">
-                                    <a href="{% url 'racks_da_sala' sala.id %}" class="btn btn-primary btn-sm">Ver racks</a>
-                                    <a href="{% url 'sala_update' sala.id %}" class="btn btn-outline-secondary btn-sm">Editar</a>
-                                    <a href="{% url 'sala_delete' sala.id %}" class="btn btn-outline-danger btn-sm">Excluir</a>
-                                </div>
+                        <div class="room-card-footer">
+                            <div class="room-meta">
+                                <span>Bloco: {{ sala.bloco|default:"-" }}</span>
+                                <span>Numero: {{ sala.numero }}</span>
+                            </div>
+                            <div class="room-actions">
+                                <a href="{% url 'racks_da_sala' sala.id %}" class="btn btn-primary btn-sm">Ver racks</a>
+                                <a href="{% url 'sala_update' sala.id %}" class="btn btn-outline-secondary btn-sm">Editar</a>
+                                <a href="{% url 'sala_delete' sala.id %}" class="btn btn-outline-danger btn-sm">Excluir</a>
                             </div>
                         </div>
                     </div>
-                {% empty %}
-                    <p>Nenhuma sala cadastrada.</p>
-                {% endfor %}
-            </div>
+                </div>
+            {% empty %}
+                <p>Nenhuma sala cadastrada.</p>
+            {% endfor %}
         </div>
-    </main>
-    <!--FOI UTILIZADO O JS DO BOOTSTRAP PARA FAZER A BARRA LATERAL FUNCIONAR--> 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
-</html>
+    </div>
+</main>
+{% endblock %}

@@ -1,79 +1,66 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RACK+ Login</title>
-  <link rel="icon" href="{% static 'media/logo.png' %}" type="image/png">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'css/logincss.css' %}">
-  <style>
-    body {
-        background: url("{% static 'media/teladefundo.png' %}") no-repeat center center fixed;
-        background-size: cover;
-    }
-  </style>
-</head>
-<body>
-  <main class="container d-flex justify-content-center align-items-center min-vh-100">
+
+{% block title %}RACK+ Login{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/logincss.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="row w-100 align-items-center justify-content-center">
-      
-      <!-- Logo -->
-      <div class="col-12 col-md-6 col-lg-4 text-center mb-4 mb-md-0 d-flex justify-content-center">
-        <a href="../placeholder/">
-          <img src="{% static 'media/logo.png' %}" alt="Logo Rack+" id="logo-img" class="img-fluid logo-img">
-        </a>
-      </div>
-
-      <!-- Formulário -->
-      <div class="col-12 col-md-6 col-lg-4">
-        <div class="card p-4">
-          <h1 class="text-center mb-4 h3 h-md2">Entrar</h1>
-            
-            <form id="loginForm" method="post">
-              {% csrf_token %}
-            <div class="mb-3">
-              <label for="email" class="form-label">E-mail</label>
-              <input type="email" class="form-control" id="email" name="email">
-            </div>
-
-            <label for="password" class="form-label">Senha</label>
-            <div class="mb-3 input-group">
-              <input type="password" class="form-control" id="password" name="password">
-              <button type="button" class="input-group-text" id="btntogglePassword" title="Mostrar ou ocultar senha" style="cursor: pointer;" onclick="togglePassword()">
-                <i class="bi bi-eye-slash" id="eyeIcon"></i>
-              </button>
-            </div>
-
-            <!-- Mensagens do Django (email/senha inválidos) -->
-            {% if messages %}
-                {% for message in messages %}
-                    <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; margin-bottom: 8px;">
-                        {{ message }}
-                    </p>
-                {% endfor %}
-            {% endif %}
-
-            <!-- Mensagem do JS (campos vazios) -->
-            <p id="mensagem" style="color:red; margin-bottom: 8px;"></p>
-
-            <button type="button" class="btn btn-custom w-100" id="btn-login" onclick="fazer_login()">Entrar</button>
-
-            <div class="text-center mt-3">
-              <a href="../cadastro/">Não possui uma conta? Cadastre-se!</a>
-            </div>
-
-            <div class="text-center mt-3">
-              <a href="../placeholder/">Esqueceu sua senha?</a>
-            </div>
-            </form>
+        <div class="col-12 col-md-6 col-lg-4 text-center mb-4 mb-md-0 d-flex justify-content-center">
+            <a href="../placeholder/">
+                <img src="{% static 'media/logo.png' %}" alt="Logo Rack+" id="logo-img" class="img-fluid logo-img">
+            </a>
         </div>
-      </div>
 
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card p-4">
+                <h1 class="text-center mb-4 h3 h-md2">Entrar</h1>
+
+                <form id="loginForm" method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-mail</label>
+                        <input type="email" class="form-control" id="email" name="email">
+                    </div>
+
+                    <label for="password" class="form-label">Senha</label>
+                    <div class="mb-3 input-group">
+                        <input type="password" class="form-control" id="password" name="password">
+                        <button type="button" class="input-group-text" id="btntogglePassword" title="Mostrar ou ocultar senha" style="cursor: pointer;" onclick="togglePassword()">
+                            <i class="bi bi-eye-slash" id="eyeIcon"></i>
+                        </button>
+                    </div>
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; margin-bottom: 8px;">
+                                {{ message }}
+                            </p>
+                        {% endfor %}
+                    {% endif %}
+
+                    <p id="mensagem" style="color:red; margin-bottom: 8px;"></p>
+
+                    <button type="button" class="btn btn-custom w-100" id="btn-login" onclick="fazer_login()">Entrar</button>
+
+                    <div class="text-center mt-3">
+                        <a href="../cadastro/">Nao possui uma conta? Cadastre-se!</a>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <a href="../placeholder/">Esqueceu sua senha?</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </main>
-  <script src="{% static 'js/loginjs.js' %}"></script>
-</body>
-</html>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/loginjs.js' %}"></script>
+{% endblock %}

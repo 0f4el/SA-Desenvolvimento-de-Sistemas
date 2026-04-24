@@ -83,6 +83,19 @@ def em_desenvolvimento_view(request):
     """Exibe uma tela placeholder"""
     return render(request, 'placeholder.html')
 
+
+def erro_404_view(request, exception=None, rota_invalida=None):
+    return render(
+        request,
+        "error_404.html",
+        {"rota": rota_invalida or request.path},
+        status=404,
+    )
+
+
+def erro_500_view(request):
+    return render(request, "error_500.html", status=500)
+
 @login_required
 def homepage_view(request):
     """Homepage protegida"""

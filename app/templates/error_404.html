@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}RACK+ | Pagina não encontrada{% endblock %}
+
+{% block extra_head %}
+<style>
+    .error-shell {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+    }
+
+    .error-card {
+        width: 100%;
+        max-width: 760px;
+        background: rgba(250, 252, 255, 0.96);
+        border-radius: 32px;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        box-shadow: 0 24px 48px rgba(15, 23, 42, 0.14);
+        overflow: hidden;
+    }
+
+    .error-hero {
+        padding: 2rem;
+        background: linear-gradient(145deg, #dbeafe 0%, #eff6ff 45%, #f8fafc 100%);
+    }
+
+    .error-code {
+        display: inline-block;
+        padding: 0.45rem 0.8rem;
+        border-radius: 999px;
+        background: #0f172a;
+        color: #f8fafc;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        margin-bottom: 1rem;
+    }
+
+    .error-title {
+        margin: 0 0 0.75rem;
+        font-size: 2rem;
+        font-weight: 800;
+        color: #0f172a;
+    }
+
+    .error-text {
+        margin: 0;
+        color: #475569;
+        font-size: 1rem;
+    }
+
+    .error-body {
+        padding: 1.5rem 2rem 2rem;
+    }
+
+    .route-chip {
+        display: inline-block;
+        padding: 0.65rem 0.85rem;
+        border-radius: 16px;
+        background: #e2e8f0;
+        color: #0f172a;
+        font-weight: 600;
+        word-break: break-word;
+    }
+
+    .error-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="error-shell">
+    <section class="error-card">
+        <div class="error-hero">
+            <span class="error-code">ERRO 404</span>
+            <h1 class="error-title">Essa página não foi encontrada</h1>
+            <p class="error-text">A rota que voce tentou acessar não existe no sistema ou foi movida.</p>
+        </div>
+
+        <div class="error-body">
+            <p class="text-muted mb-2">Rota acessada:</p>
+            <div class="route-chip">{{ rota|default:request.path }}</div>
+
+            <div class="error-actions">
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'homepage' %}" class="btn btn-primary">Voltar para a homepage</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-primary">Ir para o login</a>
+                {% endif %}
+                <a href="javascript:history.back()" class="btn btn-outline-secondary">Voltar para a página anterior</a>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

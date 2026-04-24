@@ -1,436 +1,406 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RACK+ | {{ sala.nome }}</title>
-    <link rel="icon" href="{% static 'media/logo.png' %}" type="image/png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <style>
-        body {
-            background: url("{% static 'media/teladefundo.png' %}") no-repeat center center fixed;
-            background-size: cover;
-        }
+{% extends 'base.html' %}
 
-        .page-card {
-            background: rgba(250, 252, 255, 0.95);
-            border-radius: 28px;
-            border: 1px solid rgba(15, 23, 42, 0.08);
-            backdrop-filter: blur(6px);
-        }
+{% block title %}RACK+ | {{ sala.nome }}{% endblock %}
 
-        .room-shell {
-            background: linear-gradient(145deg, #dbeafe 0%, #eff6ff 40%, #f8fafc 100%);
-            border-radius: 26px;
-            padding: 1.25rem;
-            border: 1px solid rgba(148, 163, 184, 0.18);
-        }
+{% block extra_head %}
+<style>
+    .page-card {
+        background: rgba(250, 252, 255, 0.95);
+        border-radius: 28px;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        backdrop-filter: blur(6px);
+    }
 
+    .room-shell {
+        background: linear-gradient(145deg, #dbeafe 0%, #eff6ff 40%, #f8fafc 100%);
+        border-radius: 26px;
+        padding: 1.25rem;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+    }
+
+    .room-summary {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .summary-card,
+    .metric-card {
+        background: rgba(255, 255, 255, 0.78);
+        border-radius: 20px;
+        padding: 1rem 1.1rem;
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    .summary-label {
+        display: inline-block;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: #2563eb;
+        margin-bottom: 0.45rem;
+    }
+
+    .summary-title {
+        margin: 0 0 0.4rem;
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .summary-text {
+        margin: 0;
+        color: #475569;
+    }
+
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.85rem;
+    }
+
+    .metric-label {
+        display: block;
+        font-size: 0.74rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #64748b;
+        margin-bottom: 0.15rem;
+    }
+
+    .metric-value {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .rack-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1rem;
+    }
+
+    .rack-card {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+        background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+        border-radius: 24px;
+        padding: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        box-shadow: 0 22px 44px rgba(15, 23, 42, 0.24);
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .rack-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 28px 52px rgba(15, 23, 42, 0.3);
+    }
+
+    .rack-card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .rack-id {
+        margin: 0;
+        color: #f8fafc;
+        font-size: 1.2rem;
+        font-weight: 700;
+    }
+
+    .rack-caption {
+        margin: 0.25rem 0 0;
+        color: #94a3b8;
+        font-size: 0.88rem;
+    }
+
+    .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.38rem;
+        padding: 0.45rem 0.7rem;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .status-pill::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .status-ativo {
+        background: rgba(22, 163, 74, 0.14);
+        color: #86efac;
+    }
+
+    .rack-card .status-pill.status-manutencao {
+        background-color: #facc15 !important;
+        color: #422006 !important;
+        box-shadow: 0 0 14px rgba(250, 204, 21, 0.35);
+    }
+
+    .status-inativo {
+        background: rgba(239, 68, 68, 0.16);
+        color: #fca5a5;
+    }
+
+    .rack-visual {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+        border-radius: 18px;
+        padding: 0.9rem;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        margin-bottom: 1rem;
+    }
+
+    .rack-frame {
+        background: #020617;
+        border-radius: 16px;
+        padding: 0.8rem;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    }
+
+    .rack-slots {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.45rem;
+    }
+
+    .slot-led {
+        height: 18px;
+        border-radius: 999px;
+        background: rgba(148, 163, 184, 0.22);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+
+    .slot-led.disponivel {
+        background: linear-gradient(90deg, #22c55e 0%, #86efac 100%);
+        box-shadow: 0 0 12px rgba(34, 197, 94, 0.45);
+    }
+
+    .slot-led.em-uso {
+        background: linear-gradient(90deg, #2563eb 0%, #60a5fa 100%);
+        box-shadow: 0 0 12px rgba(37, 99, 235, 0.45);
+    }
+
+    .slot-led.manutencao {
+        background: linear-gradient(90deg, #f59e0b 0%, #fcd34d 100%);
+        box-shadow: 0 0 12px rgba(245, 158, 11, 0.45);
+    }
+
+    .slot-led.ausente {
+        background: linear-gradient(90deg, #ef4444 0%, #fca5a5 100%);
+        box-shadow: 0 0 12px rgba(239, 68, 68, 0.45);
+    }
+
+    .slot-led.vazio {
+        background: rgba(148, 163, 184, 0.22);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+
+    .rack-info {
+        display: grid;
+        gap: 0.45rem;
+    }
+
+    .rack-info p {
+        margin: 0;
+        color: #cbd5e1;
+        font-size: 0.92rem;
+    }
+
+    .rack-info strong {
+        color: #f8fafc;
+    }
+
+    .rack-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem 1rem;
+        margin-top: 0.9rem;
+    }
+
+    .legend-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        color: #cbd5e1;
+        font-size: 0.82rem;
+    }
+
+    .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+    }
+
+    .legend-dot.disponivel { background: #22c55e; }
+    .legend-dot.em-uso { background: #3b82f6; }
+    .legend-dot.manutencao { background: #f59e0b; }
+    .legend-dot.ausente { background: #ef4444; }
+    .legend-dot.vazio { background: #94a3b8; }
+
+    .empty-state {
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px dashed rgba(148, 163, 184, 0.45);
+        color: #334155;
+        border-radius: 22px;
+        padding: 2rem 1.2rem;
+        text-align: center;
+    }
+
+    .page-actions {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+    }
+
+    .rack-actions {
+        display: flex;
+        gap: 0.55rem;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+    }
+
+    .messages-panel {
+        display: grid;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 991px) {
         .room-summary {
-            display: grid;
-            grid-template-columns: 1.4fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1.25rem;
+            grid-template-columns: 1fr;
         }
+    }
 
-        .summary-card,
-        .metric-card {
-            background: rgba(255, 255, 255, 0.78);
-            border-radius: 20px;
-            padding: 1rem 1.1rem;
-            border: 1px solid rgba(148, 163, 184, 0.16);
-            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
-        }
-
-        .summary-label {
-            display: inline-block;
-            font-size: 0.78rem;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: #2563eb;
-            margin-bottom: 0.45rem;
-        }
-
-        .summary-title {
-            margin: 0 0 0.4rem;
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .summary-text {
-            margin: 0;
-            color: #475569;
-        }
-
+    @media (max-width: 575px) {
         .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 0.85rem;
+            grid-template-columns: 1fr;
         }
+    }
+</style>
+{% endblock %}
 
-        .metric-label {
-            display: block;
-            font-size: 0.74rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #64748b;
-            margin-bottom: 0.15rem;
-        }
+{% block content %}
+<main class="container py-4 py-md-5">
+    <div class="page-card shadow p-4 p-md-5">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+            <div>
+                <a href="{% url 'homepage' %}" class="btn btn-outline-secondary btn-sm mb-3">Voltar para salas</a>
+                <h1 class="mb-1">{{ sala.nome }}</h1>
+                <p class="text-muted mb-0">
+                    Bloco: {{ sala.bloco|default:"-" }} |
+                    Numero: {{ sala.numero }} |
+                    Andar: {{ sala.andar|default:"-" }}
+                </p>
+            </div>
+        </div>
 
-        .metric-value {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .rack-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1rem;
-        }
-
-        .rack-card {
-            display: block;
-            text-decoration: none;
-            color: inherit;
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-            border-radius: 24px;
-            padding: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 22px 44px rgba(15, 23, 42, 0.24);
-            transition: transform 0.18s ease, box-shadow 0.18s ease;
-        }
-
-        .rack-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 28px 52px rgba(15, 23, 42, 0.3);
-        }
-
-        .rack-card-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-
-        .rack-id {
-            margin: 0;
-            color: #f8fafc;
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
-
-        .rack-caption {
-            margin: 0.25rem 0 0;
-            color: #94a3b8;
-            font-size: 0.88rem;
-        }
-
-        .status-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.38rem;
-            padding: 0.45rem 0.7rem;
-            border-radius: 999px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-
-        .status-pill::before {
-            content: "";
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: currentColor;
-        }
-
-        .status-ativo {
-            background: rgba(22, 163, 74, 0.14);
-            color: #86efac;
-        }
-
-        .rack-card .status-pill.status-manutencao {
-            background-color: #facc15 !important;
-            color: #422006 !important;
-            box-shadow: 0 0 14px rgba(250, 204, 21, 0.35);
-        }
-
-        .status-inativo {
-            background: rgba(239, 68, 68, 0.16);
-            color: #fca5a5;
-        }
-
-        .rack-visual {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
-            border-radius: 18px;
-            padding: 0.9rem;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            margin-bottom: 1rem;
-        }
-
-        .rack-frame {
-            background: #020617;
-            border-radius: 16px;
-            padding: 0.8rem;
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
-        }
-
-        .rack-slots {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 0.45rem;
-        }
-
-        .slot-led {
-            height: 18px;
-            border-radius: 999px;
-            background: rgba(148, 163, 184, 0.22);
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-        }
-
-        .slot-led.disponivel {
-            background: linear-gradient(90deg, #22c55e 0%, #86efac 100%);
-            box-shadow: 0 0 12px rgba(34, 197, 94, 0.45);
-        }
-
-        .slot-led.em-uso {
-            background: linear-gradient(90deg, #2563eb 0%, #60a5fa 100%);
-            box-shadow: 0 0 12px rgba(37, 99, 235, 0.45);
-        }
-
-        .slot-led.manutencao {
-            background: linear-gradient(90deg, #f59e0b 0%, #fcd34d 100%);
-            box-shadow: 0 0 12px rgba(245, 158, 11, 0.45);
-        }
-
-        .slot-led.ausente {
-            background: linear-gradient(90deg, #ef4444 0%, #fca5a5 100%);
-            box-shadow: 0 0 12px rgba(239, 68, 68, 0.45);
-        }
-
-        .slot-led.vazio {
-            background: rgba(148, 163, 184, 0.22);
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-        }
-
-        .rack-info {
-            display: grid;
-            gap: 0.45rem;
-        }
-
-        .rack-info p {
-            margin: 0;
-            color: #cbd5e1;
-            font-size: 0.92rem;
-        }
-
-        .rack-info strong {
-            color: #f8fafc;
-        }
-
-        .rack-legend {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.6rem 1rem;
-            margin-top: 0.9rem;
-        }
-
-        .legend-item {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            color: #cbd5e1;
-            font-size: 0.82rem;
-        }
-
-        .legend-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-
-        .legend-dot.disponivel {
-            background: #22c55e;
-        }
-
-        .legend-dot.em-uso {
-            background: #3b82f6;
-        }
-
-        .legend-dot.manutencao {
-            background: #f59e0b;
-        }
-
-        .legend-dot.ausente {
-            background: #ef4444;
-        }
-
-        .legend-dot.vazio {
-            background: #94a3b8;
-        }
-
-        .empty-state {
-            background: rgba(255, 255, 255, 0.78);
-            border: 1px dashed rgba(148, 163, 184, 0.45);
-            color: #334155;
-            border-radius: 22px;
-            padding: 2rem 1.2rem;
-            text-align: center;
-        }
-
-        .page-actions {
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-        }
-
-        .rack-actions {
-            display: flex;
-            gap: 0.55rem;
-            flex-wrap: wrap;
-            margin-top: 1rem;
-        }
-
-        .messages-panel {
-            display: grid;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-
-        @media (max-width: 991px) {
-            .room-summary {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 575px) {
-            .metrics-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-</head>
-<body>
-    <main class="container py-4 py-md-5">
-        <div class="page-card shadow p-4 p-md-5">
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-                <div>
-                    <a href="{% url 'homepage' %}" class="btn btn-outline-secondary btn-sm mb-3">Voltar para salas</a>
-                    <h1 class="mb-1">{{ sala.nome }}</h1>
-                    <p class="text-muted mb-0">
-                        Bloco: {{ sala.bloco|default:"-" }} |
-                        Numero: {{ sala.numero }} |
-                        Andar: {{ sala.andar|default:"-" }}
-                    </p>
-                </div>
-
+        <div class="room-shell">
+            <div class="page-actions">
+                <a href="{% url 'rack_create' sala.id %}" class="btn btn-success">Novo rack</a>
             </div>
 
-            <div class="room-shell">
-                <div class="page-actions">
-                    <a href="{% url 'rack_create' sala.id %}" class="btn btn-success">Novo rack</a>
-                </div>
-
-                {% if messages %}
-                    <div class="messages-panel">
-                        {% for message in messages %}
-                            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %} mb-0">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-
-                <div class="room-summary">
-                    <div class="summary-card">
-                        <span class="summary-label">Painel da Sala</span>
-                        <h2 class="summary-title">{{ sala.nome }}</h2>
-                        <p class="summary-text">Acompanhe e gerencie os racks nesta sala e acesse os notebooks de cada unidade.</p>
-                    </div>
-
-                    <div class="metrics-grid">
-                        <div class="metric-card">
-                            <span class="metric-label">Bloco</span>
-                            <span class="metric-value">{{ sala.bloco|default:"-" }}</span>
-                        </div>
-                        <div class="metric-card">
-                            <span class="metric-label">Numero</span>
-                            <span class="metric-value">{{ sala.numero }}</span>
-                        </div>
-                        <div class="metric-card">
-                            <span class="metric-label">Andar</span>
-                            <span class="metric-value">{{ sala.andar|default:"-" }}</span>
-                        </div>
-                        <div class="metric-card">
-                            <span class="metric-label">Racks</span>
-                            <span class="metric-value">{{ racks|length }}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <h2 class="h4 mb-3">Racks da sala</h2>
-
-                <div class="rack-grid">
-                    {% for rack in racks %}
-                        <div class="rack-card">
-                            <div class="rack-card-top">
-                                <div>
-                                    <h3 class="rack-id">{{ rack.identificador }}</h3>
-                                    <p class="rack-caption">Unidade inteligente da sala</p>
-                                </div>
-
-                                <span class="status-pill status-{{ rack.status }}">{{ rack.get_status_display }}</span>
-                            </div>
-
-                            <div class="rack-visual" aria-hidden="true">
-                                <div class="rack-frame">
-                                    <div class="rack-slots">
-                                        {% for slot in rack.slot_indicators %}
-                                            <span
-                                                class="slot-led {{ slot.status_class }}"
-                                                title="{{ slot.descricao }}"
-                                                aria-label="{{ slot.descricao }}">
-                                            </span>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="rack-info">
-                                <p><strong>Capacidade:</strong> {{ rack.quantidade_slots }} slots</p>
-                                <p><strong>Ocupados:</strong> {{ rack.slots_ocupados }} / {{ rack.quantidade_slots }}</p>
-                                <p><strong>Temperatura:</strong> {{ rack.temperatura|default:"-" }}</p>
-                            </div>
-
-                            <div class="rack-legend">
-                                <span class="legend-item"><span class="legend-dot disponivel"></span>Disponivel</span>
-                                <span class="legend-item"><span class="legend-dot em-uso"></span>Em uso</span>
-                                <span class="legend-item"><span class="legend-dot manutencao"></span>Manutenção</span>
-                                <span class="legend-item"><span class="legend-dot ausente"></span>Ausente</span>
-                                <span class="legend-item"><span class="legend-dot vazio"></span>Vazio</span>
-                            </div>
-
-                            <div class="rack-actions">
-                                <a href="{% url 'notebooks_do_rack' rack.id %}" class="btn btn-primary btn-sm">Ver notebooks</a>
-                                <a href="{% url 'rack_update' rack.id %}" class="btn btn-outline-light btn-sm">Editar</a>
-                                <a href="{% url 'rack_delete' rack.id %}" class="btn btn-outline-danger btn-sm">Excluir</a>
-                            </div>
-                        </div>
-                    {% empty %}
-                        <div class="empty-state">
-                            Nenhum rack cadastrado para esta sala.
+            {% if messages %}
+                <div class="messages-panel">
+                    {% for message in messages %}
+                        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %} mb-0">
+                            {{ message }}
                         </div>
                     {% endfor %}
                 </div>
+            {% endif %}
+
+            <div class="room-summary">
+                <div class="summary-card">
+                    <span class="summary-label">Painel da Sala</span>
+                    <h2 class="summary-title">{{ sala.nome }}</h2>
+                    <p class="summary-text">Acompanhe e gerencie os racks nesta sala e acesse os notebooks de cada unidade.</p>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <span class="metric-label">Bloco</span>
+                        <span class="metric-value">{{ sala.bloco|default:"-" }}</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">Numero</span>
+                        <span class="metric-value">{{ sala.numero }}</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">Andar</span>
+                        <span class="metric-value">{{ sala.andar|default:"-" }}</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-label">Racks</span>
+                        <span class="metric-value">{{ racks|length }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="h4 mb-3">Racks da sala</h2>
+
+            <div class="rack-grid">
+                {% for rack in racks %}
+                    <div class="rack-card">
+                        <div class="rack-card-top">
+                            <div>
+                                <h3 class="rack-id">{{ rack.identificador }}</h3>
+                                <p class="rack-caption">Unidade inteligente da sala</p>
+                            </div>
+
+                            <span class="status-pill status-{{ rack.status }}">{{ rack.get_status_display }}</span>
+                        </div>
+
+                        <div class="rack-visual" aria-hidden="true">
+                            <div class="rack-frame">
+                                <div class="rack-slots">
+                                    {% for slot in rack.slot_indicators %}
+                                        <span class="slot-led {{ slot.status_class }}" title="{{ slot.descricao }}" aria-label="{{ slot.descricao }}"></span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rack-info">
+                            <p><strong>Capacidade:</strong> {{ rack.quantidade_slots }} slots</p>
+                            <p><strong>Ocupados:</strong> {{ rack.slots_ocupados }} / {{ rack.quantidade_slots }}</p>
+                            <p><strong>Temperatura:</strong> {{ rack.temperatura|default:"-" }}</p>
+                        </div>
+
+                        <div class="rack-legend">
+                            <span class="legend-item"><span class="legend-dot disponivel"></span>Disponivel</span>
+                            <span class="legend-item"><span class="legend-dot em-uso"></span>Em uso</span>
+                            <span class="legend-item"><span class="legend-dot manutencao"></span>Manutencao</span>
+                            <span class="legend-item"><span class="legend-dot ausente"></span>Ausente</span>
+                            <span class="legend-item"><span class="legend-dot vazio"></span>Vazio</span>
+                        </div>
+
+                        <div class="rack-actions">
+                            <a href="{% url 'notebooks_do_rack' rack.id %}" class="btn btn-primary btn-sm">Ver notebooks</a>
+                            <a href="{% url 'rack_update' rack.id %}" class="btn btn-outline-light btn-sm">Editar</a>
+                            <a href="{% url 'rack_delete' rack.id %}" class="btn btn-outline-danger btn-sm">Excluir</a>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="empty-state">
+                        Nenhum rack cadastrado para esta sala.
+                    </div>
+                {% endfor %}
             </div>
         </div>
-    </main>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
-</html>
+    </div>
+</main>
+{% endblock %}

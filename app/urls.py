@@ -18,6 +18,8 @@ urlpatterns = [
 
     #URLs sem login
     path('placeholder/', views.em_desenvolvimento_view, name='placeholder'),
+    path('erro/404/', views.erro_404_view, name='erro_404'),
+    path('erro/500/', views.erro_500_view, name='erro_500'),
     path('', views.login_view, name='login'),
     path('cadastro/', views.cadastro_view, name='cadastro'),
 
@@ -37,5 +39,5 @@ urlpatterns = [
     
     # Logout (redireciona para login)
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-
+    path('<path:rota_invalida>/', views.erro_404_view, name='rota_invalida'),
 ]
